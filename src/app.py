@@ -8,6 +8,12 @@ SCALER_PATH = './models/scaler.pkl'
 model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 
+st.set_page_config(
+    page_title="Akselerasi Skripsi Mahasiswa Universitas Bumigora", 
+    page_icon="./img/assets/favicon.ico" 
+)
+
+
 st.title("Sistem Seleksi Program Akselerasi Skripsi")
 st.write("Aplikasi ini digunakan untuk menentukan mahasiswa yang memenuhi kriteria program akselerasi berdasarkan data yang diunggah.")
 

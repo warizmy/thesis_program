@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV, learning_curve
+from sklearn.model_selection import KFold, GridSearchCV, learning_curve
 from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,7 +8,7 @@ import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from imblearn.over_sampling import SMOTE  # Import SMOTE untuk oversampling
+from imblearn.over_sampling import SMOTE
 
 # Load data
 def load_data(file_path):
@@ -155,12 +155,13 @@ if __name__ == "__main__":
     processed_data.to_csv('./data/preprocessed/data_preprocessed.csv', index=False)
 
     # Split data into features and target
-    X = processed_data.drop('program_akselerasi', axis=1)
+    X = processed_data[['ipk', 'total_sks']]  # Hanya fitur yang relevan
     y = processed_data['program_akselerasi']
 
     # Normalize features
     scaler = StandardScaler()
     X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    joblib.dump(scaler, './models/scaler.pkl')
 
     # Oversample data
     X_resampled, y_resampled = oversample_data(X, y)
@@ -210,7 +211,6 @@ if __name__ == "__main__":
     plt.show()
 
     # Plot learning curves for both models
-    print("\nPlotting Learning Curves:")
     plot_learning_curve(GaussianNB(), X_resampled, y_resampled, title="Learning Curve Naive Bayes")
     plot_learning_curve(KNeighborsClassifier(n_neighbors=5), X_resampled, y_resampled, title="Learning Curve KNN")
 
